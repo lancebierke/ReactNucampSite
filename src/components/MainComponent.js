@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 // import { PARTNERS } from "../shared/partners";
 // import { PROMOTIONS } from "../shared/promotions";
 
-// class Main extends Component {
+class Main extends Component {
 //   constructor(props) {
 //     super(props);
 //     this.state = {
@@ -23,15 +23,6 @@ import { connect } from "react-redux";
 //       promotions: PROMOTIONS,
 //     };
 //   }
-
-const mapStateToProps = state => {
-  return {
-    campsites: state.campsites,
-    comments: state.comments,
-    partners: state.partners,
-    promotions: state.promotions
-  };
-};
 
   render() {
     const HomePage = () => {
@@ -87,5 +78,14 @@ const mapStateToProps = state => {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    campsites: state.campsites,
+    comments: state.comments,
+    partners: state.partners,
+    promotions: state.promotions
+  };
+};
 
 export default withRouter(connect(mapStateToProps)(Main));
