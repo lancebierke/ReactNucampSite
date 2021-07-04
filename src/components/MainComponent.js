@@ -14,15 +14,15 @@ import { connect } from "react-redux";
 // import { PROMOTIONS } from "../shared/promotions";
 
 class Main extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       campsites: CAMPSITES,
-//       comments: COMMENTS,
-//       partners: PARTNERS,
-//       promotions: PROMOTIONS,
-//     };
-//   }
+  //   constructor(props) {
+  //     super(props);
+  //     this.state = {
+  //       campsites: CAMPSITES,
+  //       comments: COMMENTS,
+  //       partners: PARTNERS,
+  //       promotions: PROMOTIONS,
+  //     };
+  //   }
 
   render() {
     const HomePage = () => {
@@ -62,13 +62,13 @@ class Main extends Component {
           <Route
             exact
             path="/directory"
-            render={() => <Directory campsites={this.state.campsites} />}
+            render={() => <Directory campsites={this.props.campsites} />}
           />
           <Route path="/directory/:campsiteId" component={CampsiteWithId} />
           <Route
             exact
             path="/aboutus"
-            render={() => <About partners={this.state.partners} />}
+            render={() => <About partners={this.props.partners} />}
           />
           <Route exact path="/contactus" component={Contact} />
           <Redirect to="/home" />
@@ -79,12 +79,12 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     campsites: state.campsites,
     comments: state.comments,
     partners: state.partners,
-    promotions: state.promotions
+    promotions: state.promotions,
   };
 };
 
