@@ -5,14 +5,13 @@ import {
   Button,
   Label,
   Col,
-  Row
+  Row,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { Control, LocalForm, Errors } from "react-redux-form";
+import { Control, Form, Errors } from "react-redux-form";
 // import { isArrayOrNodeList } from "reactstrap/lib/utils";
 
-
-document.body.getElementsByClassName('model')
+document.body.getElementsByClassName("model");
 //value must have a value
 const required = (val) => val && val.length;
 //value must be empty OR length less than 15
@@ -50,6 +49,7 @@ class Contact extends Component {
   handleSubmit(values) {
     console.log("Current state is: " + JSON.stringify(values));
     alert("Current state is: " + JSON.stringify(values));
+    this.props.resetFeedbackForm();
   }
 
   render() {
@@ -99,7 +99,10 @@ class Contact extends Component {
             <hr />
           </div>
           <div className="col-md-10">
-            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+            <Form
+              model="feedbackForm"
+              onSubmit={values => this.handleSubmit(values)}
+            >
               <Row className="form-group">
                 <Label htmlFor="firstName" md={2}>
                   First Name
@@ -265,7 +268,7 @@ class Contact extends Component {
                   </Button>
                 </Col>
               </Row>
-            </LocalForm>
+            </Form>
           </div>
         </div>
       </div>
