@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { Link } from "react-router-dom";
+import { Loading } from './LoadingComponent';
 
 //value must have a value
 const required = (val) => val && val.length;
@@ -24,11 +25,11 @@ const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
 //Has value and has length equal or more than 2
 const minLength = (len) => (val) => val && val.length >= len;
-//It is NOT "is NOT a Number."
-const isNumber = (val) => !isNaN(+val);
-//Email requirement regex
-const validEmail = (val) =>
-  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+// //It is NOT "is NOT a Number."
+// const isNumber = (val) => !isNaN(+val);
+// //Email requirement regex
+// const validEmail = (val) =>
+//   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 class CommentForm extends Component {
   constructor(props) {
@@ -38,15 +39,18 @@ class CommentForm extends Component {
       isModalOpen: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   toggleModal() {
     this.setState({
-      isModalOpen: !this.state.isModalOpen,
+      isModalOpen: !this.state.isModalOpen
     });
   }
+
   handleSubmit(values) {
-    alert(values);
-    console.log(values);
+    this.toggleModal();
+    this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
   }
 
   render() {
@@ -90,21 +94,19 @@ class CommentForm extends Component {
                       minLength: minLength(2),
                       maxLength: maxLength(15),
                     }}
-                  >
-                  </Control.text>
-                    <Errors
-                      className="text-danger"
-                      model=".name"
-                      show="touched"
-                      component="div"
-                      messages={{
-                        required: "Required",
-                        minLength: "Must be at least 2 characters",
-                        maxLength: "Must be 15 characters or less",
-                      }}
-                    />
+                  ></Control.text>
+                  <Errors
+                    className="text-danger"
+                    model=".name"
+                    show="touched"
+                    component="div"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be at least 2 characters",
+                      maxLength: "Must be 15 characters or less",
+                    }}
+                  />
 
-                  
                   <div className="form-group">
                     <Label htmlFor="comment">Comment</Label>
                     <Control.textarea
@@ -140,12 +142,12 @@ function RenderCampsite({ campsite }) {
   );
 }
 
-function RenderComments({ comments }) {
+function RenderComments({comments, addComment, campsiteId}) {
   if (comments) {
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
-        {comments.map((comment) => {
+        {comments.map(comment => {
           return (
             <div key={comment.id}>
               <p>
@@ -161,7 +163,7 @@ function RenderComments({ comments }) {
             </div>
           );
         })}
-        <CommentForm />
+        <CommentForm campsiteId={campsiteId} addComment={addComment} />
       </div>
     );
   }
@@ -169,6 +171,27 @@ function RenderComments({ comments }) {
 }
 
 function CampsiteInfo(props) {
+  if (props.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+  if (props.errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h4>{props.errMess}</h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   if (props.campsite) {
     return (
       <div className="container">
@@ -186,7 +209,11 @@ function CampsiteInfo(props) {
         </div>
         <div className="row">
           <RenderCampsite campsite={props.campsite} />
-          <RenderComments comments={props.comments} />
+          <RenderComments
+            comments={props.comments}
+            addComment={props.addComment}
+            campsiteId={props.campsite.id}
+          />
         </div>
       </div>
     );
