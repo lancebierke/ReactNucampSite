@@ -19,6 +19,7 @@ import { LocalForm, Control, Errors } from "react-redux-form";
 import { Link } from "react-router-dom";
 import { Loading } from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 //value must have a value
 const required = (val) => val && val.length;
@@ -138,6 +139,9 @@ class CommentForm extends Component {
 function RenderCampsite({ campsite }) {
   return (
     <div className="col-md-5 m-1">
+      <FadeTransform in transformProps={{
+        exitTransform: 'scale(0.5) translateY(-50%)'
+      }}>
       <Card>
         <CardImg
           width="100%"
@@ -148,6 +152,7 @@ function RenderCampsite({ campsite }) {
           <CardText>{campsite.description}</CardText>
         </CardBody>
       </Card>
+      </FadeTransform>
     </div>
   );
 }
@@ -157,9 +162,11 @@ function RenderComments({ comments, postComment, campsiteId }) {
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
+        <Stagger in>
         {comments.map((comment) => {
           return (
-            <div key={comment.id}>
+            <Fade in key={comment.id}>
+            <div>
               <p>
                 {comment.text}
                 <br />
@@ -171,8 +178,10 @@ function RenderComments({ comments, postComment, campsiteId }) {
                 }).format(new Date(Date.parse(comment.date)))}
               </p>
             </div>
+            </Fade>
           );
         })}
+        </Stagger>
         <CommentForm campsiteId={campsiteId} postComment={postComment} />
       </div>
     );

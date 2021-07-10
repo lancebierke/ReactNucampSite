@@ -109,9 +109,9 @@ class Main extends Component {
               <Route
                 exact
                 path="/contactus"
-                render={() => 
+                render={() => (
                   <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
-                }
+                )}
               />
               <Redirect to="/home" />
             </Switch>
