@@ -17,8 +17,8 @@ import {
 } from "reactstrap";
 import { LocalForm, Control, Errors } from "react-redux-form";
 import { Link } from "react-router-dom";
-import { Loading } from './LoadingComponent';
-import { baseUrl } from '../shared/baseUrl';
+import { Loading } from "./LoadingComponent";
+import { baseUrl } from "../shared/baseUrl";
 
 //value must have a value
 const required = (val) => val && val.length;
@@ -45,13 +45,18 @@ class CommentForm extends Component {
 
   toggleModal() {
     this.setState({
-      isModalOpen: !this.state.isModalOpen
+      isModalOpen: !this.state.isModalOpen,
     });
   }
 
   handleSubmit(values) {
     this.toggleModal();
-    this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
+    this.props.postComment(
+      this.props.campsiteId,
+      values.rating,
+      values.author,
+      values.text
+    );
   }
 
   render() {
@@ -134,7 +139,11 @@ function RenderCampsite({ campsite }) {
   return (
     <div className="col-md-5 m-1">
       <Card>
-        <CardImg width="100%" src={baseUrl + campsite.image} alt={campsite.name} />
+        <CardImg
+          width="100%"
+          src={baseUrl + campsite.image}
+          alt={campsite.name}
+        />
         <CardBody>
           <CardText>{campsite.description}</CardText>
         </CardBody>
@@ -143,12 +152,12 @@ function RenderCampsite({ campsite }) {
   );
 }
 
-function RenderComments({comments, addComment, campsiteId}) {
+function RenderComments({ comments, postComment, campsiteId }) {
   if (comments) {
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
-        {comments.map(comment => {
+        {comments.map((comment) => {
           return (
             <div key={comment.id}>
               <p>
@@ -164,7 +173,7 @@ function RenderComments({comments, addComment, campsiteId}) {
             </div>
           );
         })}
-        <CommentForm campsiteId={campsiteId} addComment={addComment} />
+        <CommentForm campsiteId={campsiteId} postComment={postComment} />
       </div>
     );
   }
@@ -192,7 +201,7 @@ function CampsiteInfo(props) {
       </div>
     );
   }
-  
+
   if (props.campsite) {
     return (
       <div className="container">
@@ -212,7 +221,7 @@ function CampsiteInfo(props) {
           <RenderCampsite campsite={props.campsite} />
           <RenderComments
             comments={props.comments}
-            addComment={props.addComment}
+            postComment={props.postComment}
             campsiteId={props.campsite.id}
           />
         </div>
